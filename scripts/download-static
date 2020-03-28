@@ -1,0 +1,6 @@
+#! /bin/sh
+
+cd data
+wget http://nycferry.connexionz.net/rtt/public/utility/gtfs.aspx
+unzip -u gtfs.aspx
+rm gtfs.aspx

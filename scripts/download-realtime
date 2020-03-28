@@ -1,0 +1,5 @@
+#! /bin/sh
+
+cd data
+wget http://nycferry.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
+wget http://nycferry.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
