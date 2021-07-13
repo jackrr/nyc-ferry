@@ -1,4 +1,4 @@
-(ns ferry.resources.stop
+(ns ferry.resources.route
   (:require
    [clojure.string :as str]
    [ferry.resources.base :refer [get-data]]))
@@ -10,27 +10,23 @@
               :db/valueType :db.type/string
               :db/cardinality :db.cardinality/one}])
 
-(defn- stop-data []
-  (get-data :stops))
+(defn- route-data []
+  (get-data :routes))
 
-(defn entities []
-  (map
-   #(do {::name (:stop_name %)
-         ::id (:stop_id %)})
-   (stop-data)))
-
-(defn stops-matching
+(defn routes-matching
   [search]
   (filter
    #(str/includes?
-     (str/lower-case (:stop_name %)) (str/lower-case search))
-   (stop-data)))
+     (str/lower-case (:route_long_name %)) (str/lower-case search))
+   (route-data)))
 
-(defn next-departure
-  [stop]
-  "TODO")
+(defn entities []
+  (map
+   #(do {::name (:route_long_name %)
+         ::id (:route_id %)})
+   (route-data)))
 
 (comment
-  (vals (first (stop-data)))
+  (route-data)
   (entities)
-  (stops-matching "DUMBO"))
+  (routes-matching "Astoria"))

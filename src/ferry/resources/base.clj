@@ -25,6 +25,8 @@
   "Loads csv file filename into memory as a seq of hashmaps"
   [filename]
   (with-open [reader (io/reader (str "data/" filename ".txt"))]
+    ;; Fix: Skip byte order mark: https://github.com/clojure/data.csv#byte-order-mark
+    (.skip reader 1)
     (let [filedata (doall (csv-data->maps (read-csv reader)))]
       (swap! parsed-files
              #(assoc % (keyword filename) filedata))
@@ -56,3 +58,7 @@
   [filekey]
   (or (filekey parsed-files)
       (load-file! (name filekey))))
+
+(comment
+  (refresh-static!)
+  (first (get-data :routes)))
