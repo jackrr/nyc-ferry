@@ -1,7 +1,9 @@
 (ns ferry.resources.base
-  (:require [clojure.java.shell :refer [sh]]
-            [clojure.data.csv :refer [read-csv]]
-            [clojure.java.io :as io]))
+  (:require
+   [clojure.string :as s]
+   [clojure.java.shell :refer [sh]]
+   [clojure.data.csv :refer [read-csv]]
+   [clojure.java.io :as io]))
 
 (def files
   ["calendar_dates"
@@ -59,6 +61,25 @@
   (or (filekey parsed-files)
       (load-file! (name filekey))))
 
+(defn ->entities [results ns]
+  (let [resource (-> ns str (s/split #"\.") last)]
+    (map
+     (fn [result]
+       (reduce
+        (fn [entity [key val]]
+          (prn entity key val)
+          (assoc entity
+                 (keyword (str ns)
+                          (-> key
+                              str
+                              (s/replace-first (str resource "_") "")))
+                 val))
+        {}
+        result))
+     results)))
+
 (comment
   (refresh-static!)
+  (first (get-data :trips))
+  (first (get-data :stop_times))
   (first (get-data :routes)))

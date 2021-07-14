@@ -1,7 +1,7 @@
 (ns ferry.resources.route
   (:require
    [clojure.string :as str]
-   [ferry.resources.base :refer [get-data]]))
+   [ferry.resources.base :refer [->entities get-data]]))
 
 (def schema [{:db/ident ::id
               :db/valueType :db.type/string
@@ -21,12 +21,8 @@
    (route-data)))
 
 (defn entities []
-  (map
-   #(do {::name (:route_long_name %)
-         ::id (:route_id %)})
-   (route-data)))
+  (->entities (route-data) *ns*))
 
 (comment
-  (route-data)
   (entities)
   (routes-matching "Astoria"))
